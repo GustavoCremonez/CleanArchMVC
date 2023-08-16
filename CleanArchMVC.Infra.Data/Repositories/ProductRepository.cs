@@ -38,21 +38,23 @@ namespace CleanArchMVC.Infra.Data.Repositories
             return product;
         }
 
-        public async Task<Product> GetProductCategoryAsync(int? id)
+        //public async Task<Product> GetProductCategoryAsync(int? id)
+        //{
+        //    Product? entity = await _context.Products
+        //        .Include(p => p.Category)
+        //        .SingleOrDefaultAsync(p => p.Id == id);
+
+        //    if (entity != null)
+        //        return entity;
+
+        //    throw new ApplicationException("Não foi encontrado o produto desejado, tente novamente!");
+        //}
+
+        public async Task<Product> GetProductByIdAsync(int? id)
         {
             Product? entity = await _context.Products
                 .Include(p => p.Category)
                 .SingleOrDefaultAsync(p => p.Id == id);
-
-            if (entity != null)
-                return entity;
-
-            throw new ApplicationException("Não foi encontrado o produto desejado, tente novamente!");
-        }
-
-        public async Task<Product> GetProductByIdAsync(int? id)
-        {
-            Product? entity = await _context.Products.FindAsync(id);
 
             if (entity != null)
                 return entity;

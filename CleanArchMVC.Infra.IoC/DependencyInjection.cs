@@ -1,9 +1,13 @@
-﻿using CleanArchMVC.Domain.Interfaces;
+﻿using CleanArchMVC.Application.Interfaces;
+using CleanArchMVC.Application.Mappings;
+using CleanArchMVC.Application.Services;
+using CleanArchMVC.Domain.Interfaces;
 using CleanArchMVC.Infra.Data.Context;
 using CleanArchMVC.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace CleanArchMVC.Infra.IoC
 {
@@ -14,6 +18,8 @@ namespace CleanArchMVC.Infra.IoC
                 IConfiguration configuration
             )
         {
+            Assembly myHandlers = AppDomain.CurrentDomain.Load("CleanArchMVC.Application");
+
             services.AddDbContext<ApplicationDbContext>(
                     options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
@@ -21,6 +27,10 @@ namespace CleanArchMVC.Infra.IoC
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(myHandlers));
 
             return services;
         }

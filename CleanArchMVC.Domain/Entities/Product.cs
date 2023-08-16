@@ -30,7 +30,7 @@ namespace CleanArchMVC.Domain.Entities
 
         public Category Category { get; set; }
 
-        private void Update(string name, string description, decimal price, int stock, string image, int categoryId)
+        public void Update(string name, string description, decimal price, int stock, string image, int categoryId)
         {
             ValidateDomain(name, description, price, stock, image);
             CategoryId = categoryId;
